@@ -30,6 +30,9 @@ buildscript {
         rxKotlinVersion = '2.2.0'
         rxAndroidVersion = '2.0.2'
 
+        // Android KTX
+        ktxVersion = "0.3"
+
         //Mockito
         mockitoVersion = '2.16.0'
         mockitoAndroidVersion = '2.13.0'

@@ -1,7 +1,8 @@
-package com.github.ininmm.assignmentdemo
+package com.github.ininmm.assignmentdemo.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.github.ininmm.assignmentdemo.R
 
 class MainActivity : AppCompatActivity() {
 
