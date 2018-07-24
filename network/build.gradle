@@ -12,13 +12,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
     }
 
     buildTypes {

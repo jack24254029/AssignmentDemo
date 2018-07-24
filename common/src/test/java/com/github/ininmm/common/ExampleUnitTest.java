@@ -1,4 +1,4 @@
-package com.github.ininmm.network;
+package com.github.ininmm.common;
 
 import org.junit.Test;
 

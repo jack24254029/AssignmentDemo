@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -13,6 +15,11 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
     }
 
     buildTypes {

@@ -1,4 +1,4 @@
-package com.github.ininmm.network;
+package com.github.ininmm.common;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
