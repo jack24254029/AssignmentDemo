@@ -30,6 +30,12 @@ buildscript {
         rxKotlinVersion = '2.2.0'
         rxAndroidVersion = '2.0.2'
 
+        // JSoup
+        jsoupVersion = '1.11.3'
+
+        // Retrofit2
+        retrofitVersion = '2.4.0'
+
         // Android KTX
         ktxVersion = "0.3"
 
