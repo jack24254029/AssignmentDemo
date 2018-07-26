@@ -48,6 +48,16 @@ dependencies {
 
     // optional - RxJava support for Room
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
+
+    // Retrofit2
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-simplexml:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    // Jsoup
+    implementation "org.jsoup:jsoup:$jsoupVersion"
+
     // Android KTX
     implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
 
