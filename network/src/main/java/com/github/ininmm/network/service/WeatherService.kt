@@ -1,6 +1,6 @@
-package com.github.ininmm.service
+package com.github.ininmm.network.service
 
-import com.github.ininmm.entity.Weather
+import com.github.ininmm.network.entity.WeatherRss
 import io.reactivex.Observable
 import retrofit2.http.GET
 
@@ -13,5 +13,5 @@ interface WeatherService {
      * 獲取氣象局台中市一周內的天氣資料
      */
     @GET("rss/forecast/36_08.xml")
-    fun getWeather(): Observable<Weather>
+    fun getWeather(): Observable<WeatherRss>
 }

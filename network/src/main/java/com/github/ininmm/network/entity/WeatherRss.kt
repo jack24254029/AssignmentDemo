@@ -1,4 +1,4 @@
-package com.github.ininmm.entity
+package com.github.ininmm.network.entity
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root
@@ -8,7 +8,7 @@ import org.simpleframework.xml.Root
  * on 2018/7/26.
  */
 @Root(name = "rss", strict = false)
-data class Weather (
+data class WeatherRss (
     @field:Element(name = "channel")
     var channel: Channel? = null
 )

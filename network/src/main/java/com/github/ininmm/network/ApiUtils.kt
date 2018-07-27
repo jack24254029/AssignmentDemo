@@ -1,6 +1,6 @@
 package com.github.ininmm.network
 
-import com.github.ininmm.service.WeatherService
+import com.github.ininmm.network.service.WeatherService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Maybe

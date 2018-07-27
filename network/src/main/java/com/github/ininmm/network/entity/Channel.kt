@@ -1,4 +1,4 @@
-package com.github.ininmm.entity
+package com.github.ininmm.network.entity
 
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
