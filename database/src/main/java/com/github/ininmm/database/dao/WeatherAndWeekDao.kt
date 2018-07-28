@@ -4,6 +4,8 @@ import android.arch.persistence.room.*
 import com.github.ininmm.database.entity.Weather
 import com.github.ininmm.database.entity.WeatherAndWeek
 import com.github.ininmm.database.entity.WeatherWeek
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 /**
  * Created by Michael Lien
@@ -20,7 +22,7 @@ abstract class WeatherAndWeekDao {
 
     @Transaction
     @Query("SELECT * FROM Weather")
-    abstract fun loadWeatherAndWeek(): List<WeatherAndWeek>
+    abstract fun loadWeatherAndWeek(): Flowable<List<WeatherAndWeek>>
 
     @Delete
     abstract fun deleteWeather(entity: Weather): Int

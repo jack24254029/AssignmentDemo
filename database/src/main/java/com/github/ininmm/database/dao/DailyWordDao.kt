@@ -3,7 +3,7 @@ package com.github.ininmm.database.dao
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Query
 import com.github.ininmm.database.entity.DailyWord
-import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 /**
  * Created by Michael Lien
@@ -16,5 +16,8 @@ interface DailyWordDao : BaseDao<DailyWord> {
     fun deleteById(dailyId: Long): Int
 
     @Query("SELECT * FROM DailyWord")
-    fun loadAll(): Flowable<List<DailyWord>>
+    fun loadAll(): Maybe<List<DailyWord>>
+
+    @Query("SELECT * FROM DailyWord WHERE dailyId = :id")
+    fun load(id: Long): Maybe<DailyWord>
 }
