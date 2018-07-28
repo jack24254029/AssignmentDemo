@@ -1,7 +1,7 @@
 package com.github.ininmm.common.util
 
 import android.util.Log
-import com.github.ininmm.network.BuildConfig
+import com.github.ininmm.common.BuildConfig
 
 /**
  * 這是 [Log] 的 extension
