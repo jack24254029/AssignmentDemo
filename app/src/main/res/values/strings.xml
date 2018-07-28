@@ -4,5 +4,6 @@
 
     <string name="app_ok">確認</string>
     <string name="app_cancel">取消</string>
-    <string name="app_text_delete_data">是否要刪除此資料？</string>
+    <string name="app_title_delete_data">刪除天氣</string>
+    <string name="app_message_delete_data">是否要刪除此資料？</string>
 </resources>

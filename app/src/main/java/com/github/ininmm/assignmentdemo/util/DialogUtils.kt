@@ -51,8 +51,8 @@ object DialogUtils {
                 .setPositiveButton(confirmText, confirmListener)
                 .setNegativeButton(cancelText, cancelListener)
         val dialog = builder.create()
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.setCancelable(true)
         return dialog
     }
 }
