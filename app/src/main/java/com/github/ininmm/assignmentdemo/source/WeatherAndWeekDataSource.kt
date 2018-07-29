@@ -12,7 +12,7 @@ import io.reactivex.Flowable
  */
 interface WeatherAndWeekDataSource {
 
-    fun loadWeathers(): Flowable<List<WeatherAndWeek>>
+    fun loadWeathers(forceRefresh: Boolean): Flowable<List<WeatherAndWeek>>
 
     fun addWeathers(entity: WeatherAndWeek): List<Long>
 

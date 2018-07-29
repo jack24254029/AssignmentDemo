@@ -30,7 +30,7 @@ interface MainPageContract {
     }
 
     interface Presenter : BasePresenter {
-        fun loadData()
+        fun loadData(forceRefresh: Boolean)
 
         fun refresh()
 

@@ -36,12 +36,13 @@ class DailyRepository(private val dailyLocalSource: DailyWordDataSource,
 
     var caches = mutableListOf<DailyWord>()
 
-    override fun loadDailyWords(): Flowable<List<DailyWord>> {
+    override fun loadDailyWords(forceRefresh: Boolean): Flowable<List<DailyWord>> {
+        if (forceRefresh) return refreshData()
         return if (caches.size > 0) {
             // 如果有暫存，直接返回
             Flowable.just(caches)
         } else {
-            dailyLocalSource.loadDailyWords()
+            dailyLocalSource.loadDailyWords(false)
                     .take(1)
                     .flatMap { Flowable.fromIterable(it) }
                     .doOnNext { caches.add(it) }
@@ -68,7 +69,7 @@ class DailyRepository(private val dailyLocalSource: DailyWordDataSource,
      * 呼叫 API 更新，並把資料存進本地及暫存
      */
     fun refreshData(): Flowable<List<DailyWord>> {
-        return dailyRemoteSource.loadDailyWords()
+        return dailyRemoteSource.loadDailyWords(true)
                 .doOnNext {
                     caches.clear()
                     dailyLocalSource.clearData()

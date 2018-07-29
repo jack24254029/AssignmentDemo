@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
     }
 
     override fun showWeatherList(weatherWeek: List<WeatherWeek>) {
-        weatherAdapter.refresh(mutableListOf())
+        weatherAdapter.refresh(weatherWeek.toMutableList())
     }
 
     override fun showErrorMessage() {
@@ -112,6 +112,8 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
             }
         })
 
+        refreshBtn.setOnClickListener { presenter.loadData(true) }
+
         rvWeather.apply {
             setHasFixedSize(true)
             adapter = weatherAdapter
@@ -119,11 +121,11 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
             addItemDecoration(DividerItemDecoration(this@MainActivity.dpToPx(5f).toInt()))
         }
 
-        weatherAdapter.deleteWeatherItem = { pair ->
+        weatherAdapter.deleteWeatherItem = { weatherWeek ->
             showDialog(title = getString(R.string.app_title_delete_data),
                     message = getString(R.string.app_message_delete_data),
                     confirmListener = DialogInterface.OnClickListener { dialog, which ->
-//                        presenter.deleteWeatherWeek(WeatherWeek())
+                        presenter.deleteWeatherWeek(weatherWeek)
 //                        sampleList.remove(pair)
 //                        weatherAdapter.refresh(sampleList)
                     })

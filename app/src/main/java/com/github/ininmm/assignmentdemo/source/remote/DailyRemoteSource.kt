@@ -12,7 +12,7 @@ import io.reactivex.Flowable
  */
 class DailyRemoteSource : DailyWordDataSource {
 
-    override fun loadDailyWords(): Flowable<List<DailyWord>> {
+    override fun loadDailyWords(forceRefresh: Boolean): Flowable<List<DailyWord>> {
         return ApiUtils.getJsoup().map { document ->
             val rawString = document.select(".dphs").text()
             return@map mutableListOf(DailyWord(rawString))

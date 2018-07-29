@@ -8,6 +8,7 @@ import com.github.ininmm.assignmentdemo.contract.MainPageContract
 import com.github.ininmm.assignmentdemo.repository.DailyRepository
 import com.github.ininmm.assignmentdemo.repository.WeatherRepository
 import com.github.ininmm.common.scheduler.ISchedulerProvider
+import com.github.ininmm.common.util.logE
 import com.github.ininmm.database.entity.DailyWord
 import com.github.ininmm.database.entity.WeatherAndWeek
 import com.github.ininmm.database.entity.WeatherWeek
@@ -27,18 +28,20 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     init {
-        if (mainView is LifecycleObserver) {
+        if (mainView is LifecycleOwner) {
             (mainView as LifecycleOwner).lifecycle.addObserver(this)
         }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    override fun subscribe() {
-        loadData()
+    override fun onLifeCycleResume() {
+        logE("ON_RESUME")
+        loadData(false)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    override fun unsubscribe() {
+    override fun onLifeCyclePause() {
+        logE("ON_PAUSE")
         compositeDisposable.clear()
     }
 
@@ -61,12 +64,12 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
         compositeDisposable.add(disposable)
     }
 
-    override fun loadData() {
+    override fun loadData(forceRefresh: Boolean) {
         // 清除畫面資料
         clearAllData()
 
-        val disposable = Flowable.zip(dailyRepository.loadDailyWords(),
-                weatherRepository.loadWeathers(),
+        val disposable = Flowable.zip(dailyRepository.loadDailyWords(forceRefresh),
+                weatherRepository.loadWeathers(forceRefresh),
                 BiFunction<List<DailyWord>,
                         List<WeatherAndWeek>,
                         Pair<List<DailyWord>, List<WeatherAndWeek>>> { listOfDaily, listOfWeather ->
@@ -88,11 +91,17 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
         }.subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe({
-                    mainView.showDeleteItemMessage()
+                    if (it) {
+                        mainView.showWeatherList(weatherRepository.caches[0].weatherWeeks)
+                        mainView.showDeleteItemMessage()
+                    } else {
+                        handleError()
+                    }
                 }, {
                     it.printStackTrace()
                     handleError()
                 })
+        compositeDisposable.add(disposable)
     }
 
     /**

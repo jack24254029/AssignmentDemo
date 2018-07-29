@@ -23,7 +23,7 @@ buildscript {
         roomVersion = '1.1.1'
 
         // Architecture Components dependencies
-        archLifecycleVersion = '1.1.0'
+        archLifecycleVersion = '1.1.1'
 
         // RxJava dependencies
         rxJavaVersion = '2.1.16'

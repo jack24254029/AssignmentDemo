@@ -1,6 +1,5 @@
 package com.github.ininmm.assignmentdemo.adapter
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,7 @@ import kotlinx.android.synthetic.main.item_weather.view.*
 /**
  * Created by Michael Lien on 2018/7/25.
  */
-class WeatherAdapter(private var sampleList: MutableList<WeatherWeek>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WeatherAdapter(private var weatherList: MutableList<WeatherWeek>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
      * 刪除天氣
@@ -20,7 +19,7 @@ class WeatherAdapter(private var sampleList: MutableList<WeatherWeek>) : Recycle
     var deleteWeatherItem: ((WeatherWeek) -> Unit)? = null
 
     fun refresh(sampleList: MutableList<WeatherWeek>) {
-        this.sampleList = sampleList
+        this.weatherList = sampleList
         notifyDataSetChanged()
     }
 
@@ -31,13 +30,12 @@ class WeatherAdapter(private var sampleList: MutableList<WeatherWeek>) : Recycle
     }
 
     override fun getItemCount(): Int {
-        return sampleList.size
+        return weatherList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder !is WeatherViewHolder) return
-//        holder.itemView.ivWeatherData.text = sampleList[position].first.toString()
-//        holder.itemView.ivWeatherMessage.text = sampleList[position].second
+        holder.itemView.ivWeatherData.text = weatherList[position].description
         holder.itemView.ivWeather.setOnLongClickListener {
             if (it != null) {
                 onLongClick(it, position)
@@ -49,7 +47,7 @@ class WeatherAdapter(private var sampleList: MutableList<WeatherWeek>) : Recycle
     }
 
     private fun onLongClick(v: View, position: Int) {
-        deleteWeatherItem?.invoke(sampleList[position])
+        deleteWeatherItem?.invoke(weatherList[position])
     }
 
     private inner class WeatherViewHolder(root: View): RecyclerView.ViewHolder(root)

@@ -9,7 +9,7 @@ import io.reactivex.Flowable
  */
 interface DailyWordDataSource {
 
-    fun loadDailyWords(): Flowable<List<DailyWord>>
+    fun loadDailyWords(forceRefresh: Boolean): Flowable<List<DailyWord>>
 
     fun addDailyWord(entity: DailyWord): Long
 

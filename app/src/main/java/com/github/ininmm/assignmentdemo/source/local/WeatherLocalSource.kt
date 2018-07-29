@@ -32,7 +32,7 @@ class WeatherLocalSource(private val weatherAndWeekDao: WeatherAndWeekDao) : Wea
         }
     }
 
-    override fun loadWeathers(): Flowable<List<WeatherAndWeek>> {
+    override fun loadWeathers(forceRefresh: Boolean): Flowable<List<WeatherAndWeek>> {
         return weatherAndWeekDao.loadWeatherAndWeek()
     }
 

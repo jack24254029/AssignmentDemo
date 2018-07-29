@@ -40,8 +40,9 @@ abstract class WeatherAndWeekDao {
     abstract fun deleteWeatherWeekById(weekId: Long): Int
 
     fun insertWeeksForWeather(weather: Weather, weeks: List<WeatherWeek>): List<Long> {
+        val id = insertWeather(weather)
         weeks.forEach {
-            it.weatherId = weather.weatherId
+            it.weatherId = id
         }
 
         return insertAllWeatherWeek(weeks)

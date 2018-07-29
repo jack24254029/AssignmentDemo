@@ -6,7 +6,7 @@ package com.github.ininmm.arch.base
  */
 interface BasePresenter {
 
-    fun subscribe()
+    fun onLifeCycleResume()
 
-    fun unsubscribe()
+    fun onLifeCyclePause()
 }

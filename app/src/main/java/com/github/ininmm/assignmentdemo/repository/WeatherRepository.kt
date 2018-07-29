@@ -2,6 +2,7 @@ package com.github.ininmm.assignmentdemo.repository
 
 import com.github.ininmm.assignmentdemo.source.WeatherAndWeekDataSource
 import com.github.ininmm.common.scheduler.ISchedulerProvider
+import com.github.ininmm.common.util.logE
 import com.github.ininmm.database.entity.WeatherAndWeek
 import com.github.ininmm.database.entity.WeatherWeek
 import io.reactivex.Flowable
@@ -37,17 +38,18 @@ class WeatherRepository(private val weatherLocalSource: WeatherAndWeekDataSource
 
     var caches = mutableListOf<WeatherAndWeek>()
 
-    override fun loadWeathers(): Flowable<List<WeatherAndWeek>> {
+    override fun loadWeathers(forceRefresh: Boolean): Flowable<List<WeatherAndWeek>> {
+        if (forceRefresh) return refreshData()
         return if (caches.size > 0) {
             Flowable.just(caches)
         } else {
-            weatherLocalSource.loadWeathers()
+            weatherLocalSource.loadWeathers(false)
                     .take(1)
                     .flatMap { Flowable.fromIterable(it) }
                     .doOnNext { caches.add(it) }
                     .toList()
                     .toFlowable()
-                    .filter { it[0].weatherWeeks.isNotEmpty() }
+                    .filter { it.size > 0 && it[0].weatherWeeks.isNotEmpty() }
                     .switchIfEmpty(refreshData())
         }
     }
@@ -64,7 +66,8 @@ class WeatherRepository(private val weatherLocalSource: WeatherAndWeekDataSource
     }
 
     override fun deleteWeatherItem(entity: WeatherWeek): Int {
-        caches[0].weatherWeeks.toMutableList().remove(entity)
+        val delete = caches[0].weatherWeeks.remove(entity)
+        logE(delete.toString())
         return weatherLocalSource.deleteWeatherItem(entity)
     }
 
@@ -72,7 +75,7 @@ class WeatherRepository(private val weatherLocalSource: WeatherAndWeekDataSource
      * 呼叫 API 更新，並把資料存進本地及暫存
      */
     fun refreshData(): Flowable<List<WeatherAndWeek>> {
-        return weatherRemoteSource.loadWeathers()
+        return weatherRemoteSource.loadWeathers(true)
                 .doOnNext {
                     caches.clear()
                     weatherLocalSource.clearData()

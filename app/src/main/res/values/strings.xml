@@ -2,6 +2,7 @@
     <string name="app_name">AssignmentDemo</string>
     <string name="app_auto_refresh">手動刷新資料</string>
 
+    <string name="app_default_title">中央氣象局 臺中市 一週天氣預報</string>
     <string name="app_ok">確認</string>
     <string name="app_cancel">取消</string>
     <string name="app_title_delete_data">刪除天氣</string>

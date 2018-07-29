@@ -51,9 +51,9 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
 
     // Android Lifecycle arch
-    implementation "android.arch.lifecycle:runtime:$roomVersion"
-    implementation "android.arch.lifecycle:extensions:$roomVersion"
-    annotationProcessor "android.arch.lifecycle:compiler:$roomVersion"
+    implementation "android.arch.lifecycle:runtime:$archLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
 
     // Retrofit2
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

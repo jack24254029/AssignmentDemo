@@ -33,7 +33,7 @@ class WeatherRemoteSource(private val weatherService: WeatherService) : WeatherA
         }
     }
 
-    override fun loadWeathers(): Flowable<List<WeatherAndWeek>> {
+    override fun loadWeathers(forceRefresh: Boolean): Flowable<List<WeatherAndWeek>> {
         return weatherService.getWeather().flatMap { weatherRss ->
             // 第二個 item 才是需要的
             val weatherItem = weatherRss.channel?.weatherItems?.get(1)
@@ -41,11 +41,12 @@ class WeatherRemoteSource(private val weatherService: WeatherService) : WeatherA
                 this.title = weatherItem?.title ?: this.title
             }
             val splitData = splitWeather((weatherItem?.description ?: "UnKnownError"))
+                    .filter { it.isNotBlank() }
 
             var weatherWeek: MutableList<WeatherWeek> = mutableListOf()
 
-            for (i in 0..splitData.size) {
-                weatherWeek.add(WeatherWeek(splitData[i]))
+            for (i in 0 until splitData.size) {
+                weatherWeek.add(WeatherWeek(splitData[i], 0))
             }
 
             val weatherAndWeek = WeatherAndWeek(weather).apply {

@@ -29,7 +29,7 @@ class DailyLocalSource(private val dailyWordDao: DailyWordDao) : DailyWordDataSo
         }
     }
 
-    override fun loadDailyWords(): Flowable<List<DailyWord>> {
+    override fun loadDailyWords(forceRefresh: Boolean): Flowable<List<DailyWord>> {
         return dailyWordDao.loadAll()
     }
 
