@@ -18,26 +18,9 @@ import android.arch.persistence.room.PrimaryKey
 data class WeatherWeek (
 
         /**
-         * 日期
-         */
-        var date: String,
-
-        /**
-         * 時間，白天或晚上
-         */
-        @ColumnInfo(name = "time_period")
-        var timePeriod: String,
-
-        /**
-         * 溫度
-         */
-        var temperature: String,
-
-
-        /**
          * 天氣描述
          */
-        var description: String
+        var description: String = "1/1 半夜 溫度:-20 ~ -5 天打雷劈"
 ) {
     @PrimaryKey(autoGenerate = true)
     var weekId: Long = 0

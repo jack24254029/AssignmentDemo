@@ -6,19 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.ininmm.assignmentdemo.R
+import com.github.ininmm.database.entity.WeatherWeek
 import kotlinx.android.synthetic.main.item_weather.view.*
 
 /**
  * Created by Michael Lien on 2018/7/25.
  */
-class WeatherAdapter(private var sampleList: MutableList<Pair<Int, String>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WeatherAdapter(private var sampleList: MutableList<WeatherWeek>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
      * 刪除天氣
      */
-    var deleteWeatherItem: ((Pair<Int, String>) -> Unit)? = null
+    var deleteWeatherItem: ((WeatherWeek) -> Unit)? = null
 
-    fun refresh(sampleList: MutableList<Pair<Int, String>>) {
+    fun refresh(sampleList: MutableList<WeatherWeek>) {
         this.sampleList = sampleList
         notifyDataSetChanged()
     }
@@ -35,8 +36,8 @@ class WeatherAdapter(private var sampleList: MutableList<Pair<Int, String>>) : R
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder !is WeatherViewHolder) return
-        holder.itemView.ivWeatherData.text = sampleList[position].first.toString()
-        holder.itemView.ivWeatherMessage.text = sampleList[position].second
+//        holder.itemView.ivWeatherData.text = sampleList[position].first.toString()
+//        holder.itemView.ivWeatherMessage.text = sampleList[position].second
         holder.itemView.ivWeather.setOnLongClickListener {
             if (it != null) {
                 onLongClick(it, position)

@@ -1,5 +1,7 @@
 package com.github.ininmm.assignmentdemo.ui
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleRegistry
 import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -15,10 +17,14 @@ import com.github.ininmm.assignmentdemo.extension.dpToPx
 import com.github.ininmm.assignmentdemo.presenter.MainPagePresenter
 import com.github.ininmm.assignmentdemo.util.DialogUtils
 import com.github.ininmm.assignmentdemo.util.DividerItemDecoration
+import com.github.ininmm.database.entity.DailyWord
+import com.github.ininmm.database.entity.Weather
 import com.github.ininmm.database.entity.WeatherWeek
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainPageContract.View {
+
+    private val lifecycleRegistry = LifecycleRegistry(this)
 
     private lateinit var weatherAdapter: WeatherAdapter
 
@@ -26,28 +32,52 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
 
     private lateinit var presenter: MainPagePresenter
 
-    private var sampleList = mutableListOf<Pair<Int, String>>(1 to "a",
-            2 to "b",
-            3 to "c",
-            4 to "d",
-            5 to "e",
-            6 to "f",
-            7 to "g",
-            8 to "h",
-            9 to "i")
+    private var sampleList = mutableListOf("1", "2", "3")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         presenter = PresenterFactory.getInstance().createMainPagePresenter(this)
-        weatherAdapter = WeatherAdapter(sampleList)
+        weatherAdapter = WeatherAdapter(mutableListOf())
         initView()
         toast("長按以刪除")
     }
 
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
+    }
+
+    override fun clearTitle() {
+        tvTitle.text = ""
+    }
+
+    override fun clearList() {
+        weatherAdapter.refresh(mutableListOf())
+    }
+
+    override fun clearDailyWord() {
+        tvDescription.text = ""
+    }
+
+    override fun showDailyWord(dailyWord: DailyWord) {
+        tvDescription.text = dailyWord.word
+    }
+
+    override fun showDailyTitle(weather: Weather) {
+        tvTitle.text = weather.title
+    }
+
+    override fun showWeatherList(weatherWeek: List<WeatherWeek>) {
+        weatherAdapter.refresh(mutableListOf())
+    }
+
+    override fun showErrorMessage() {
+        toast("Oops! Something Wrong")
+    }
+
     override fun showDeleteItemMessage() {
-        toast("Delete")
+        toast("Delete Item")
     }
 
     private fun initView() {
@@ -94,8 +124,8 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
                     message = getString(R.string.app_message_delete_data),
                     confirmListener = DialogInterface.OnClickListener { dialog, which ->
 //                        presenter.deleteWeatherWeek(WeatherWeek())
-                        sampleList.remove(pair)
-                        weatherAdapter.refresh(sampleList)
+//                        sampleList.remove(pair)
+//                        weatherAdapter.refresh(sampleList)
                     })
         }
     }

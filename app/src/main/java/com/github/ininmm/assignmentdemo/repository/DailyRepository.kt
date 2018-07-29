@@ -1,17 +1,17 @@
 package com.github.ininmm.assignmentdemo.repository
 
-import com.github.ininmm.assignmentdemo.source.datasource.DailyWordDataSource
-import com.github.ininmm.assignmentdemo.source.networksource.DailyNetWorkSource
+import com.github.ininmm.assignmentdemo.source.DailyWordDataSource
+import com.github.ininmm.common.scheduler.ISchedulerProvider
 import com.github.ininmm.database.entity.DailyWord
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 
 /**
  * Created by Michael Lien
  * on 2018/7/29.
  */
 class DailyRepository(private val dailyLocalSource: DailyWordDataSource,
-                      private val dailyNetWorkSource: DailyNetWorkSource) : DailyWordDataSource, DailyNetWorkSource {
+                      private val dailyRemoteSource: DailyWordDataSource,
+                      private val schedulerProvider: ISchedulerProvider) : DailyWordDataSource {
 
     companion object {
         private var INSTANCE: DailyRepository? = null
@@ -20,9 +20,12 @@ class DailyRepository(private val dailyLocalSource: DailyWordDataSource,
          * 單例，沒用 Dagger 前先這樣，或是直接 new instance
          */
         fun getInstance(dailyLocalSource: DailyWordDataSource,
-                        dailyNetWorkSource: DailyNetWorkSource): DailyRepository {
+                        dailyRemoteSource: DailyWordDataSource,
+                        schedulerProvider: ISchedulerProvider): DailyRepository {
             return INSTANCE ?: synchronized(DailyRepository::class.java) {
-                INSTANCE ?: DailyRepository(dailyLocalSource, dailyNetWorkSource).also { INSTANCE = it }
+                INSTANCE ?: DailyRepository(dailyLocalSource,
+                        dailyRemoteSource,
+                        schedulerProvider).also { INSTANCE = it }
             }
         }
 
@@ -31,31 +34,49 @@ class DailyRepository(private val dailyLocalSource: DailyWordDataSource,
         }
     }
 
-    override fun deleteById(dailyId: Long): Flowable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    var caches = mutableListOf<DailyWord>()
+
+    override fun loadDailyWords(): Flowable<List<DailyWord>> {
+        return if (caches.size > 0) {
+            // 如果有暫存，直接返回
+            Flowable.just(caches)
+        } else {
+            dailyLocalSource.loadDailyWords()
+                    .take(1)
+                    .flatMap { Flowable.fromIterable(it) }
+                    .doOnNext { caches.add(it) }
+                    .toList()
+                    .toFlowable()
+                    .filter { it.isNotEmpty() }
+                    .switchIfEmpty(refreshData())
+            // 如果本地是空的，直接從遠端獲取資料
+        }
     }
 
-    override fun loadAll(): Flowable<List<DailyWord>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun addDailyWord(entity: DailyWord): Long {
+        caches.clear()
+        caches.add(entity)
+        return dailyLocalSource.addDailyWord(entity)
     }
 
-    override fun insert(vararg entity: DailyWord): Flowable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun clearData(): Int {
+        caches.clear()
+        return dailyLocalSource.clearData()
     }
 
-    override fun insertAll(entities: List<DailyWord>): Flowable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun update(entity: DailyWord): Flowable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun delete(entity: DailyWord): Flowable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getDailyWork(): Maybe<DailyWord> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    /**
+     * 呼叫 API 更新，並把資料存進本地及暫存
+     */
+    fun refreshData(): Flowable<List<DailyWord>> {
+        return dailyRemoteSource.loadDailyWords()
+                .doOnNext {
+                    caches.clear()
+                    dailyLocalSource.clearData()
+                }.flatMap {
+                    Flowable.fromIterable(it)
+                }.doOnNext {
+                    caches.add(it)
+                    dailyLocalSource.addDailyWord(it)
+                }.toList().toFlowable()
     }
 }

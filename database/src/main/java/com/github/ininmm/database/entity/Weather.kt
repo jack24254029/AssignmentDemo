@@ -14,7 +14,7 @@ data class Weather (
         /**
          * 標題
          */
-        var title: String
+        var title: String = "default"
 ) {
     @PrimaryKey(autoGenerate = true)
     var weatherId: Long = 0

@@ -2,10 +2,10 @@ package com.github.ininmm.assignmentdemo
 
 import com.github.ininmm.assignmentdemo.repository.DailyRepository
 import com.github.ininmm.assignmentdemo.repository.WeatherRepository
-import com.github.ininmm.assignmentdemo.source.datasource.local.DailyLocalSource
-import com.github.ininmm.assignmentdemo.source.datasource.local.WeatherLocalSource
-import com.github.ininmm.assignmentdemo.source.networksource.remote.DailyRemoteSource
-import com.github.ininmm.assignmentdemo.source.networksource.remote.WeatherRemoteSource
+import com.github.ininmm.assignmentdemo.source.local.DailyLocalSource
+import com.github.ininmm.assignmentdemo.source.local.WeatherLocalSource
+import com.github.ininmm.assignmentdemo.source.remote.DailyRemoteSource
+import com.github.ininmm.assignmentdemo.source.remote.WeatherRemoteSource
 import com.github.ininmm.common.scheduler.SchedulerProvider
 import com.github.ininmm.database.AssignmentDataBase
 import com.github.ininmm.database.dao.DailyWordDao
@@ -29,7 +29,8 @@ object Injection {
     fun provideDailyRepository(): DailyRepository {
 
         return DailyRepository.getInstance(provideDailyLocalSource(),
-                provideDailyRemoteSource())
+                provideDailyRemoteSource(),
+                provideSchedulerProvider())
     }
 
     /**
@@ -37,7 +38,8 @@ object Injection {
      */
     fun provideWeatherRepository(): WeatherRepository {
         return WeatherRepository.getInstance(provideWeatherLocalSource(),
-                provideWeatherRemoteSource())
+                provideWeatherRemoteSource(),
+                provideSchedulerProvider())
     }
 
     /**

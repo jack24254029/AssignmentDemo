@@ -50,6 +50,11 @@ dependencies {
     // optional - RxJava support for Room
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
 
+    // Android Lifecycle arch
+    implementation "android.arch.lifecycle:runtime:$roomVersion"
+    implementation "android.arch.lifecycle:extensions:$roomVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$roomVersion"
+
     // Retrofit2
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"

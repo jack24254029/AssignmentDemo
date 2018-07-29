@@ -3,6 +3,8 @@ package com.github.ininmm.network
 import com.github.ininmm.network.service.WeatherService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Maybe
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -40,12 +42,12 @@ object ApiUtils {
     /**
      * 返回 Jsoup document
      */
-    fun getJsoup(url: String = dailyUrl): Maybe<Document> {
-        return Maybe.create<Document> {
+    fun getJsoup(url: String = dailyUrl): Flowable<Document> {
+        return Flowable.create<Document> ({
             val document = Jsoup.connect(url).get()
-            it.onSuccess(document)
+            it.onNext(document)
             it.onComplete()
-        }
+        }, BackpressureStrategy.BUFFER)
     }
 
     /**

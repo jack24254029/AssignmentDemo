@@ -17,10 +17,7 @@ class WeatherAndWeekDaoTest : DbTest() {
     fun insertAndLoad() {
         val weather = TestUtils.createWeather("臺中市 一週天氣預報")
         val weatherWeeks = TestUtils.createWeatherWeeks(5,
-                "07/28",
-                "晚上",
-                "溫度:27 ~ 31",
-                "多雲短暫陣雨")
+                "07/29 晚上 溫度:28 ~ 32 多雲")
 
         val weatherId = db.weatherAndWeekDao().insertWeather(weather)
         weather.weatherId = weatherId

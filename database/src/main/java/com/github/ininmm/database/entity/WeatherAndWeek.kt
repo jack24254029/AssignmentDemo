@@ -16,5 +16,5 @@ data class WeatherAndWeek (
 
 ) {
         @Relation(parentColumn = "weatherId", entityColumn = "weatherId", entity = WeatherWeek::class)
-        var weatherWeeks: List<WeatherWeek>? = null
+        var weatherWeeks: List<WeatherWeek> = mutableListOf()
 }
