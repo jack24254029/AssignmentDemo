@@ -8,6 +8,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
@@ -47,14 +48,21 @@ object ApiUtils {
         }
     }
 
-    private fun buildAPI(): Retrofit {
+    /**
+     * 建造 Service 的工廠方法
+     */
+    fun<T> createService(serviceClass: Class<T>): T {
+        return getRetrofit().create(serviceClass)
+    }
+
+    private fun buildAPI(factory: Converter.Factory = SimpleXmlConverterFactory.create()): Retrofit {
         val client = createClient()
 
         return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addConverterFactory(SimpleXmlConverterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(factory)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }

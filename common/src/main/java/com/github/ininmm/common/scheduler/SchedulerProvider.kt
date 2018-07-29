@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
  * Created by Michael Lien
  * on 2018/7/24.
  */
-class SchedulerProvider : ISchedulerProvider, ThreadHandler by ThreadHandlerImpl() {
+object SchedulerProvider : ISchedulerProvider, ThreadHandler by ThreadHandlerImpl() {
     override fun ui(): Scheduler {
         return AndroidSchedulers.mainThread()
     }

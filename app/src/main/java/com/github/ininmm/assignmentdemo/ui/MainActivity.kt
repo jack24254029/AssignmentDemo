@@ -7,18 +7,24 @@ import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import androidx.core.widget.toast
+import com.github.ininmm.assignmentdemo.contract.MainPageContract
+import com.github.ininmm.assignmentdemo.PresenterFactory
 import com.github.ininmm.assignmentdemo.R
 import com.github.ininmm.assignmentdemo.adapter.WeatherAdapter
 import com.github.ininmm.assignmentdemo.extension.dpToPx
+import com.github.ininmm.assignmentdemo.presenter.MainPagePresenter
 import com.github.ininmm.assignmentdemo.util.DialogUtils
 import com.github.ininmm.assignmentdemo.util.DividerItemDecoration
+import com.github.ininmm.database.entity.WeatherWeek
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainPageContract.View {
 
     private lateinit var weatherAdapter: WeatherAdapter
 
     private var dialog: AlertDialog? = null
+
+    private lateinit var presenter: MainPagePresenter
 
     private var sampleList = mutableListOf<Pair<Int, String>>(1 to "a",
             2 to "b",
@@ -33,9 +39,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        presenter = PresenterFactory.getInstance().createMainPagePresenter(this)
         weatherAdapter = WeatherAdapter(sampleList)
         initView()
         toast("長按以刪除")
+    }
+
+    override fun showDeleteItemMessage() {
+        toast("Delete")
     }
 
     private fun initView() {
@@ -81,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             showDialog(title = getString(R.string.app_title_delete_data),
                     message = getString(R.string.app_message_delete_data),
                     confirmListener = DialogInterface.OnClickListener { dialog, which ->
-                        toast("Delete")
+//                        presenter.deleteWeatherWeek(WeatherWeek())
                         sampleList.remove(pair)
                         weatherAdapter.refresh(sampleList)
                     })

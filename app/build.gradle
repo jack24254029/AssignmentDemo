@@ -26,6 +26,7 @@ dependencies {
     implementation project(':common')
     implementation project(':database')
     implementation project(':network')
+    implementation project(':arch')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 

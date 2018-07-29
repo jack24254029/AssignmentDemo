@@ -1,4 +1,4 @@
-package com.github.ininmm.database.datasource
+package com.github.ininmm.assignmentdemo.source.datasource
 
 import com.github.ininmm.database.entity.DailyWord
 import io.reactivex.Flowable
