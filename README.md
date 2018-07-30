@@ -1,14 +1,57 @@
 AssignmentDemo
 =====
 
-這是一個題目的練習
+這是一個實作題目的練習
+
+
+### 資料表
+
+##### Weather
+
+```kotlin
+@PrimaryKey
+weatherId: Long,
+
+title: String
 
 ```
-TODO:
-1.熟悉MVP-N架構 (2D)
-2.熟悉JSOUP or Retrofit with simpleXML (2D)
-3.熟悉模塊化及模塊通訊(2D)
-4.拉UI/UX(1D)
-5.建立網路核心(1D)
-6.建立MVP-N結構(1D)
+
+##### DailyWord
+
+```kotlin
+@PrimaryKey
+dailyId: Long,
+
+word: String
+
 ```
+
+##### WeatherWeek
+
+```kotlin
+@PrimaryKey
+weekId: Long,
+
+description: String,
+
+weatherId: Long
+
+```
+
+關聯式 Data Class
+
+```kotlin
+@Embedded
+weather: Weather,
+
+@Relation
+weatherWeeks: MutableList<WeatherWeek>,
+
+```
+
+###需求
+1.取得台中市 最近一週的天氣預報, 天氣預報顯示在列表上, 天氣標題顯示在上方展開畫面
+
+2.下滑刷新，呼叫兩個API，更新資料庫並同步更新畫面
+
+3.長按列表其中一項，跳出刪除提示並確認後，刪除資料庫項目並同步更新畫面
