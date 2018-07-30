@@ -22,11 +22,15 @@ interface MainPageContract {
 
         fun showDailyWord(dailyWord: DailyWord)
 
-        fun showDailyTitle(weather: Weather)
+        fun showDailyTitle(weatherTitle: String)
 
         fun showWeatherList(weatherWeek: List<WeatherWeek>)
 
         fun showErrorMessage()
+
+        fun showRefreshing()
+
+        fun stopRefreshing()
     }
 
     interface Presenter : BasePresenter {

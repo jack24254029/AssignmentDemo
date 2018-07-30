@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import androidx.core.widget.toast
@@ -22,7 +23,10 @@ import com.github.ininmm.database.entity.Weather
 import com.github.ininmm.database.entity.WeatherWeek
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), MainPageContract.View {
+class MainActivity : AppCompatActivity(), MainPageContract.View, SwipeRefreshLayout.OnRefreshListener {
+    override fun onRefresh() {
+        presenter.loadData(true)
+    }
 
     private val lifecycleRegistry = LifecycleRegistry(this)
 
@@ -31,8 +35,6 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
     private var dialog: AlertDialog? = null
 
     private lateinit var presenter: MainPagePresenter
-
-    private var sampleList = mutableListOf("1", "2", "3")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +66,8 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
         tvDescription.text = dailyWord.word
     }
 
-    override fun showDailyTitle(weather: Weather) {
-        tvTitle.text = weather.title
+    override fun showDailyTitle(weatherTitle: String) {
+        tvTitle.text = weatherTitle
     }
 
     override fun showWeatherList(weatherWeek: List<WeatherWeek>) {
@@ -80,7 +82,21 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
         toast("Delete Item")
     }
 
+    override fun showRefreshing() {
+        srWeather.post {
+            srWeather.isRefreshing = true
+        }
+    }
+
+    override fun stopRefreshing() {
+        srWeather.isRefreshing = false
+    }
+
     private fun initView() {
+
+        srWeather.setOnRefreshListener(this)
+        srWeather.setColorSchemeResources(R.color.md_deep_purple_800, R.color.md_purple_400)
+
         // 客製化 CollapsingToolbar，讓長度超過的天氣標題可以完整顯示
         collapsingToolbar.apply {
             setCollapsedTitleTextAppearance(R.style.TextAppearance_MyApp_Title_Collapsed)
@@ -112,7 +128,7 @@ class MainActivity : AppCompatActivity(), MainPageContract.View {
             }
         })
 
-        refreshBtn.setOnClickListener { presenter.loadData(true) }
+//        refreshBtn.setOnClickListener { presenter.loadData(true) }
 
         rvWeather.apply {
             setHasFixedSize(true)

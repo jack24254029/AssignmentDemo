@@ -4,6 +4,8 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
+import com.github.ininmm.assignmentdemo.AssignmentApplication
+import com.github.ininmm.assignmentdemo.R
 import com.github.ininmm.assignmentdemo.contract.MainPageContract
 import com.github.ininmm.assignmentdemo.repository.DailyRepository
 import com.github.ininmm.assignmentdemo.repository.WeatherRepository
@@ -46,6 +48,8 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
     }
 
     override fun refresh() {
+        // 此方法的功能被 loadData 取代
+
         clearAllData()
 
         val disposable = Flowable.zip(dailyRepository.refreshData(),
@@ -67,6 +71,7 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
     override fun loadData(forceRefresh: Boolean) {
         // 清除畫面資料
         clearAllData()
+        mainView.showDailyTitle(AssignmentApplication.context.getString(R.string.app_loading_title))
 
         val disposable = Flowable.zip(dailyRepository.loadDailyWords(forceRefresh),
                 weatherRepository.loadWeathers(forceRefresh),
@@ -77,10 +82,13 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
                     pair
                 }).subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
-                .subscribe(this::handleReturnedData) {
+                .subscribe({
+                    this.handleReturnedData(it)
+
+                }, {
                     it.printStackTrace()
                     handleError()
-                }
+                })
         compositeDisposable.add(disposable)
     }
 
@@ -113,13 +121,15 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
         }
 
         if (pair.second.isNotEmpty()) {
-            mainView.showDailyTitle(pair.second[0].weather)
+            mainView.showDailyTitle(pair.second[0].weather.title)
             mainView.showWeatherList(pair.second[0].weatherWeeks)
         }
+        mainView.stopRefreshing()
     }
 
     private fun handleError() {
         mainView.showErrorMessage()
+        mainView.stopRefreshing()
     }
 
     private fun clearAllData() {
