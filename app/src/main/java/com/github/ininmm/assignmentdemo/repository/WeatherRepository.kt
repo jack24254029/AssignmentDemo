@@ -82,8 +82,17 @@ class WeatherRepository(private val weatherLocalSource: WeatherAndWeekDataSource
                 }.flatMap {
                     Flowable.fromIterable(it)
                 }.doOnNext {
+                    // 將資料存回 DB 並把 ID 放回 原本的資料
+                    val weeks = it.weatherWeeks
+                     
+                    val ids = weatherLocalSource.addWeathers(it)
+
+                    for (i in 0 until weeks.size -1) {
+                        weeks[i].weekId = ids[i]
+                    }
+                    it.weatherWeeks = weeks
                     caches.add(it)
-                    weatherLocalSource.addWeathers(it)
+
                 }.toList().toFlowable()
     }
 }

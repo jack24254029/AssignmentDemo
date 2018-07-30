@@ -45,6 +45,7 @@ abstract class WeatherAndWeekDao {
             it.weatherId = id
         }
 
+        // 返回所有加入的 WeatherWeek id
         return insertAllWeatherWeek(weeks)
     }
 }
