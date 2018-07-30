@@ -42,6 +42,10 @@ buildscript {
         //Mockito
         mockitoVersion = '2.16.0'
         mockitoAndroidVersion = '2.13.0'
+
+        // Dagger 2
+        daggerVersion = '2.16'
+        glassFishVersion = '10.0-b28'
     }
     repositories {
         google()

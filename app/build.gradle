@@ -65,6 +65,14 @@ dependencies {
     implementation "org.jsoup:jsoup:$jsoupVersion"
 
     // Android KTX
-    implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
+    implementation "androidx.core:core-ktx:$ktxVersion"
+
+    // Dagger 2
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt  "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt  "com.google.dagger:dagger-android-processor:$daggerVersion"
+    compileOnly "org.glassfish:javax.annotation:$glassFishVersion"
 
 }

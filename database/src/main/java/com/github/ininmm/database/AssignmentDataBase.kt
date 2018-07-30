@@ -21,18 +21,4 @@ abstract class AssignmentDataBase : RoomDatabase() {
 
     abstract fun dailyWordDao(): DailyWordDao
 
-    companion object {
-        @Volatile private var INSTANCE: AssignmentDataBase? = null
-
-        fun getInstance(context: Context): AssignmentDataBase {
-            return INSTANCE ?: buildDataBase(context).also { INSTANCE = it }
-        }
-
-        private fun buildDataBase(context: Context): AssignmentDataBase {
-            return Room.databaseBuilder(context.applicationContext,
-                    AssignmentDataBase::class.java,
-                    "AssignmentDataBase")
-                    .build()
-        }
-    }
 }
