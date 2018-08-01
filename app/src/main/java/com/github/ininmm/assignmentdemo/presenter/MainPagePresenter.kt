@@ -94,7 +94,8 @@ class MainPagePresenter(private val dailyRepository: DailyRepository,
 
     override fun deleteWeatherWeek(weatherWeek: WeatherWeek) {
         val disposable = Observable.create<Boolean> {
-            it.onNext(weatherRepository.deleteWeatherItem(weatherWeek) > 0)
+            val deleteId = weatherRepository.deleteWeatherItem(weatherWeek)
+            it.onNext(deleteId > 0)
             it.onComplete()
         }.subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())

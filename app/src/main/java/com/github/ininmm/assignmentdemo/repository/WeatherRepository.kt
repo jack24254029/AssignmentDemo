@@ -87,7 +87,7 @@ class WeatherRepository(private val weatherLocalSource: WeatherAndWeekDataSource
                      
                     val ids = weatherLocalSource.addWeathers(it)
 
-                    for (i in 0 until weeks.size -1) {
+                    for (i in 0 until weeks.size) {
                         weeks[i].weekId = ids[i]
                     }
                     it.weatherWeeks = weeks
